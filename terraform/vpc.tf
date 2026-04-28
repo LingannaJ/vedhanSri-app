@@ -18,12 +18,12 @@ module "vpc" {
   single_nat_gateway = true # ఖర్చు తగ్గించడానికి
 
   public_subnet_tags = {
-    "kubernetes.io/role/elb" = "1"
+    "kubernetes.io/role/elb"              = "1"
     "kubernetes.io/cluster/vedhansri-eks" = "shared" # క్లస్టర్ నేమ్ ఇక్కడ ఉండాలి
   }
 
   private_subnet_tags = {
-    "kubernetes.io/role/internal-elb" = "1"
+    "kubernetes.io/role/internal-elb"     = "1"
     "kubernetes.io/cluster/vedhansri-eks" = "shared"
   }
 }
