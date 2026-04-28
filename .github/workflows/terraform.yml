@@ -30,11 +30,18 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
+     # - name: Terraform Init
+      #  run: |
+       #   terraform init -reconfigure \
+       #     -backend-config="region=us-east-1" \
+       #     -backend-config="bucket=vedhansri-terraform-state"
+
       - name: Terraform Init
         run: |
           terraform init -reconfigure \
             -backend-config="region=us-east-1" \
-            -backend-config="bucket=vedhansri-terraform-state"
+            -backend-config="bucket=vedhansri-terraform-state" \
+            -backend-config="key=infra/terraform.tfstate"
 
       #- name: Terraform Format Check
        # run: terraform fmt -check
