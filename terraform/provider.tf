@@ -4,7 +4,7 @@ terraform {
   backend "s3" {
     bucket         = "vedhansri-terraform-state" # మీ బకెట్ పేరు మార్చుకోండి
     key            = "infra/terraform.tfstate"
-    region         = "ap-south-1"
+    region         = "us-east-1"
     dynamodb_table = "terraform-lock"            # LockID అనే Partition Key తో టేబుల్ ఉండాలి
     encrypt        = true
   }
