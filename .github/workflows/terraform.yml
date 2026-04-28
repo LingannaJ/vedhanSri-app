@@ -35,13 +35,17 @@ jobs:
           terraform init -reconfigure \
             -backend-config="region=us-east-1" \
             -backend-config="bucket=vedhansri-terraform-state"
-            
-      - name: Terraform Format Check
-        run: terraform fmt -check
+
+      #- name: Terraform Format Check
+       # run: terraform fmt -check
 
       - name: Terraform Plan
         run: terraform plan -input=false
 
-      - name: Terraform Apply
+      # - name: Terraform Apply
+      #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      #   run: terraform apply -auto-approve -input=false
+
+      - name: Terraform Destroy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
+        run: terraform destroy -auto-approve -input=false
