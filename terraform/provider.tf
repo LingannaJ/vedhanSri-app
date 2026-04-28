@@ -2,10 +2,10 @@ terraform {
   required_version = ">= 1.0"
 
   backend "s3" {
-    bucket         = "vedhansri-terraform-state" # మీ బకెట్ పేరు మార్చుకోండి
+    bucket         = "vedhansri-terraform-state"
     key            = "infra/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "terraform-lock"           # LockID అనే Partition Key తో టేబుల్ ఉండాలి
+    dynamodb_table = "terraform-lock"
     encrypt        = true
   }
 
