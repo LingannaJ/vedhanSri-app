@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  # 1. API Gateway (Entry Point)
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - catalog-service
+      - academy-service
+      - booking-service
+    networks:
+      - vedhansri-network
+
+  # 2. Frontend Service (React/Next.js)
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    expose:
+      - "3000"
+    networks:
+      - vedhansri-network
+    depends_on:
+      - catalog-service
+
+  # 3. Catalog Microservice & its Database
+  catalog-db:
+    image: postgres:13
+    container_name: catalog-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: catalog_db
+    networks:
+      - vedhansri-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d catalog_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  catalog-service:
+    build: ./catalog-service
+    container_name: catalog-service
+    environment:
+      - DATABASE_URL=postgresql://user:password@catalog-db:5432/catalog_db
+    networks:
+      - vedhansri-network
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+
+  # 4. Academy Microservice & its Database
+  academy-db:
+    image: postgres:13
+    container_name: academy-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: academy_db
+    networks:
+      - vedhansri-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d academy_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  academy-service:
+    build: ./academy-service
+    container_name: academy-service
+    environment:
+      - DB_HOST=academy-db
+      - DB_NAME=academy_db
+      - DB_USER=user
+      - DB_PASSWORD=password
+    networks:
+      - vedhansri-network
+    depends_on:
+      academy-db:
+        condition: service_healthy
+
+  # 5. Booking Microservice & its Database
+  booking-db:
+    image: postgres:13
+    container_name: booking-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: booking_db
+    networks:
+      - vedhansri-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d booking_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  booking-service:
+    build: ./booking-service
+    container_name: booking-service
+    environment:
+      - DATABASE_URL=postgresql://user:password@booking-db:5432/booking_db
+    networks:
+      - vedhansri-network
+    depends_on:
+      booking-db:
+        condition: service_healthy
+
+networks:
+  vedhansri-network:
+    driver: bridge

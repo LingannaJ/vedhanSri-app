@@ -1,0 +1,72 @@
+name: Vedhan Sri App Multi-Service CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # 1. Catalog Service Job
+  build-catalog:
+    name: Build Catalog (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and Push Catalog
+        run: |
+          echo "Building Catalog Service..."
+          # docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/catalog-service:latest ./catalog-service
+          # docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          # docker push ${{ secrets.DOCKERHUB_USERNAME }}/catalog-service:latest
+
+  # 2. Academy Service Job
+  build-academy:
+    name: Build Academy (Java)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Build with Maven
+        run: mvn -f academy-service/pom.xml clean package -DskipTests
+      - name: Build and Push Academy Docker Image
+        run: |
+          echo "Building Academy Service Image..."
+          # docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/academy-service:latest ./academy-service
+
+  # 3. Booking Service Job
+  build-booking:
+    name: Build Booking (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and Push Booking
+        run: |
+          echo "Building Booking Service..."
+          # docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/booking-service:latest ./booking-service
+
+  # 4. Frontend Job
+  build-frontend:
+    name: Build Frontend (React)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Frontend Image
+        run: |
+          echo "Building Frontend..."
+          # docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest ./frontend
+
+  # 5. API Gateway Job
+  build-gateway:
+    name: Build API Gateway (Nginx)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Gateway Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest ./api-gateway

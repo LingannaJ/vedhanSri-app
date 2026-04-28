@@ -1,0 +1,51 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vedhansri-ingress
+  namespace: vedhansri-prod
+  annotations:
+    # AWS Load Balancer Controller ని వాడుతున్నాం
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    # కేవలం హెల్తీగా ఉన్న పాడ్స్‌కే ట్రాఫిక్ వెళ్లాలి
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+spec:
+  rules:
+    - http:
+        paths:
+          # 1. Frontend Route (Main Website)
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+
+          # 2. Catalog Service
+          - path: /api/catalog/
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog-service
+                port:
+                  number: 80
+
+          # 3. Academy Service
+          - path: /api/academy/
+            pathType: Prefix
+            backend:
+              service:
+                name: academy-service
+                port:
+                  number: 80
+
+          # 4. Booking Service
+          - path: /api/booking/
+            pathType: Prefix
+            backend:
+              service:
+                name: booking-service
+                port:
+                  number: 80
