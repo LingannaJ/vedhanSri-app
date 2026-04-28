@@ -4,11 +4,11 @@ module "db" {
 
   identifier = "vedhansri-production-db"
 
-  engine               = "postgres"
-  engine_version       = "13"
-  family               = "postgres13"
-  instance_class       = "db.t3.medium"
-  allocated_storage     = 20
+  engine            = "postgres"
+  engine_version    = "13"
+  family            = "postgres13"
+  instance_class    = "db.t3.medium"
+  allocated_storage = 20
 
   db_name  = "catalog_db"
   username = "dbadmin"
