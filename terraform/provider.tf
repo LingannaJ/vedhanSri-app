@@ -5,7 +5,7 @@ terraform {
     bucket         = "vedhansri-terraform-state" # మీ బకెట్ పేరు మార్చుకోండి
     key            = "infra/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "terraform-lock"            # LockID అనే Partition Key తో టేబుల్ ఉండాలి
+    use_lockfile   = true            # LockID అనే Partition Key తో టేబుల్ ఉండాలి
     encrypt        = true
   }
 
