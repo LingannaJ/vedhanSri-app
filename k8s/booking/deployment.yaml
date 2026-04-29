@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: booking-app
-        image: your-docker-username/booking-service:latest
+        image: lingannaj/booking-service:latest
         ports:
         - containerPort: 8082
         env:
@@ -30,6 +30,6 @@ spec:
               name: db-credentials
               key: password
         - name: DB_HOST
-          value: "vedhansri-production-db.xyz.ap-south-1.rds.amazonaws.com"
+          value: "vedhansri-production-db.xyz.us-east-1.rds.amazonaws.com"
         - name: DATABASE_URL
           value: "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):5432/booking_db"

@@ -1,13 +1,23 @@
-name: Vedhan Sri Infra Cleanup (Destroy)
+name: Vedhan Sri Infra Management (Manual)
 
 on:
-  push:
-    branches: [ "main" ]
+  # ఇది మాన్యువల్‌గా బటన్ ద్వారా రన్ చేయడానికి అనుమతిస్తుంది
+  workflow_dispatch:
+    inputs:
+      terraform_action:
+        description: 'Terraform Action (apply/destroy)'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+        - apply
+        - destroy
 
 jobs:
   terraform:
-    name: 'Terraform Destroy'
+    name: 'Terraform ${{ github.event.inputs.terraform_action }}'
     runs-on: ubuntu-latest
+    
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -25,12 +35,22 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        # ఇక్కడ -reconfigure మరియు backend-config లు రీజియన్ సమస్యను పోగొడతాయి
         run: |
           terraform init -reconfigure \
             -backend-config="region=us-east-1" \
             -backend-config="bucket=vedhansri-terraform-state" \
             -backend-config="key=infra/terraform.tfstate"
 
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve -input=false
+      - name: Terraform Plan
+        run: terraform plan -input=false
+
+      - name: Terraform Execution
+        # యూజర్ సెలెక్ట్ చేసిన ఆప్షన్ (apply లేదా destroy) ని ఇక్కడ రన్ చేస్తుంది
+        run: |
+          if [ "${{ github.event.inputs.terraform_action }}" == "apply" ]; then
+            echo "Running Terraform Apply..."
+            terraform apply -auto-approve -input=false
+          elif [ "${{ github.event.inputs.terraform_action }}" == "destroy" ]; then
+            echo "Running Terraform Destroy..."
+            terraform destroy -auto-approve -input=false
+          fi

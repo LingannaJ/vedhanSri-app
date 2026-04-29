@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: academy-app
-        image: your-docker-username/academy-service:latest
+        image: lingannaj/academy-service:latest
         ports:
         - containerPort: 8081
         env:
@@ -30,6 +30,6 @@ spec:
               name: db-credentials
               key: password
         - name: DB_HOST
-          value: "vedhansri-production-db.xyz.ap-south-1.rds.amazonaws.com"
+          value: "vedhansri-production-db.xyz.us-east-1.rds.amazonaws.com"
         - name: DB_NAME
           value: "academy_db"

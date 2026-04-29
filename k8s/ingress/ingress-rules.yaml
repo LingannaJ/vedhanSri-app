@@ -4,27 +4,22 @@ metadata:
   name: vedhansri-ingress
   namespace: vedhansri-prod
   annotations:
-    # AWS Load Balancer Controller ని వాడుతున్నాం
-    kubernetes.io/ingress.class: alb
+    # AWS Load Balancer Controller సెట్టింగ్స్
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    # కేవలం హెల్తీగా ఉన్న పాడ్స్‌కే ట్రాఫిక్ వెళ్లాలి
+    kubernetes.io/ingress.class: alb
+    
+    # హెల్త్ చెక్ (ప్రతి సర్వీస్ లో ఈ పాత్ ఉండేలా చూసుకోండి)
     alb.ingress.kubernetes.io/healthcheck-path: /health
+    
+    # Path Redirects సమస్యలు రాకుండా ఈ అదనపు అనోటేషన్ అవసరం కావచ్చు
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
 spec:
   rules:
     - http:
         paths:
-          # 1. Frontend Route (Main Website)
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend
-                port:
-                  number: 80
-
-          # 2. Catalog Service
-          - path: /api/catalog/
+          # 1. Catalog Service (Matches Port 80)
+          - path: /api/catalog
             pathType: Prefix
             backend:
               service:
@@ -32,8 +27,8 @@ spec:
                 port:
                   number: 80
 
-          # 3. Academy Service
-          - path: /api/academy/
+          # 2. Academy Service (Matches Port 80)
+          - path: /api/academy
             pathType: Prefix
             backend:
               service:
@@ -41,11 +36,20 @@ spec:
                 port:
                   number: 80
 
-          # 4. Booking Service
-          - path: /api/booking/
+          # 3. Booking Service (Matches Port 80)
+          - path: /api/booking
             pathType: Prefix
             backend:
               service:
                 name: booking-service
+                port:
+                  number: 80
+
+          # 4. Frontend (Default Path - చివరిలో ఉండాలి)
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
                 port:
                   number: 80

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend-app
-        image: your-docker-username/frontend:latest # CI/CD ద్వారా వచ్చే ఇమేజ్
+        image: lingannaj/frontend:latest # CI/CD ద్వారా వచ్చే ఇమేజ్
         ports:
         - containerPort: 3000
         resources:
