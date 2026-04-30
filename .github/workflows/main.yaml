@@ -1,8 +1,7 @@
 name: Vedhan Sri App CI/CD
 
 on:
-  push:
-    branches: [ "main" ]
+  # push సెక్షన్ తీసేశాను, కాబట్టి ఇకపై ఆటోమేటిక్ గా రన్ అవ్వదు.
   workflow_dispatch:
     inputs:
       confirm_deploy:
