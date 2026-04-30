@@ -1,7 +1,5 @@
-# ఇక్కడ ఎటువంటి కాన్ఫిగరేషన్ అవసరం లేదు, ఇది డెఫాల్ట్ కుబెర్నెటిస్ ప్రొవైడర్ ని వాడుకుంటుంది
-provider "helm" {
-  # ఖాళీగా వదిలేయండి
-}
+# ఇక్కడ ఎటువంటి provider "helm" బ్లాక్ ఉంచవద్దు. 
+# ఎందుకంటే మనం provider.tf లో ఇప్పటికే ప్రొవైడర్స్ ఇచ్చాం.
 
 resource "helm_release" "aws_lb_controller" {
   name       = "aws-load-balancer-controller"

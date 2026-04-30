@@ -30,9 +30,17 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          clean: true       # పాత ఫైల్స్ ఏవీ మిగలకుండా క్లీన్ చేస్తుంది
+          fetch-depth: 0    # పూర్తి హిస్టరీని తీసుకుంటుంది
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
+
+      - name: Clean Terraform Cache
+        run: |
+          rm -rf .terraform/
+          rm -f .terraform.lock.hcl
 
       - name: Terraform Init
         run: |
