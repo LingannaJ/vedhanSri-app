@@ -44,7 +44,7 @@ jobs:
 
       - name: Terraform Init
         run: |
-          terraform init -upgrade \
+          terraform init -upgrade -reconfigure \
             -backend-config="region=us-east-1" \
             -backend-config="bucket=vedhansri-terraform-state" \
             -backend-config="key=infra/terraform.tfstate"
