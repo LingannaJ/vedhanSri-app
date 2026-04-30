@@ -1,13 +1,6 @@
+# ఇక్కడ ఎటువంటి కాన్ఫిగరేషన్ అవసరం లేదు, ఇది డెఫాల్ట్ కుబెర్నెటిస్ ప్రొవైడర్ ని వాడుకుంటుంది
 provider "helm" {
-  kubernetes {
-    host                   = module.eks.cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
-      command     = "aws"
-    }
-  }
+  # ఖాళీగా వదిలేయండి
 }
 
 resource "helm_release" "aws_lb_controller" {
